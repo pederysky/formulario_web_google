@@ -15,7 +15,7 @@
         <label for="correo">Correo:</label>
         <input type="email" id="correo" name="correo" required><br><br>
 
-        <input type="submit" value="Enviar">
+        <input type="submit" value="Enviar" id="enviar-button">
       </form>
     </div>
 
@@ -45,6 +45,9 @@
           return;
         }
 
+        // Deshabilitar el botón de enviar
+        document.getElementById("enviar-button").disabled = true;
+
         // Llama a la función en Google Apps Script
         google.script.run
           .withSuccessHandler(function() {
@@ -61,8 +64,9 @@
         document.getElementById("formulario-container").style.display = "block";
         document.getElementById("agradecimiento-container").style.display = "none";
         
-        // Limpia los campos del formulario
+        // Limpia los campos del formulario y habilita el botón de enviar
         document.getElementById("formulario").reset();
+        document.getElementById("enviar-button").disabled = false;
       }
     </script>
   </body>
