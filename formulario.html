@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <h2>Formulario de Registro de Pedro Egea</h2>
+    
+    <!-- Formulario de registro (inicialmente visible) -->
+    <div id="formulario-container">
+      <form id="formulario">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="correo">Correo:</label>
+        <input type="email" id="correo" name="correo" required><br><br>
+
+        <input type="submit" value="Enviar">
+      </form>
+    </div>
+
+    <!-- Mensaje de agradecimiento (inicialmente oculto) -->
+    <div id="agradecimiento-container" style="display: none;">
+      <h3>¡Gracias por registrarte!</h3>
+      <p>Se ha enviado un correo de bienvenida a tu dirección.</p>
+      <button onclick="volverARegistrar()">Hacer un nuevo registro</button>
+    </div>
+
+    <script>
+      // Función para validar el formato del correo
+      function esCorreoValido(correo) {
+        var regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return regex.test(correo);
+      }
+
+      // Al hacer submit del formulario
+      document.getElementById("formulario").onsubmit = function(event) {
+        event.preventDefault(); // Evita que se recargue la página
+        var nombre = document.getElementById("nombre").value;
+        var correo = document.getElementById("correo").value;
+
+        // Validar si el correo es válido
+        if (!esCorreoValido(correo)) {
+          alert("Por favor ingresa un correo electrónico válido.");
+          return;
+        }
+
+        // Llama a la función en Google Apps Script
+        google.script.run
+          .withSuccessHandler(function() {
+            // Al recibir confirmación de que el correo fue enviado, cambia la vista
+            document.getElementById("formulario-container").style.display = "none";
+            document.getElementById("agradecimiento-container").style.display = "block";
+          })
+          .enviarCorreo(nombre, correo);
+      };
+
+      // Función para hacer un nuevo registro
+      function volverARegistrar() {
+        // Vuelve a mostrar el formulario
+        document.getElementById("formulario-container").style.display = "block";
+        document.getElementById("agradecimiento-container").style.display = "none";
+        
+        // Limpia los campos del formulario
+        document.getElementById("formulario").reset();
+      }
+    </script>
+  </body>
+</html>
